@@ -46,9 +46,9 @@ class Department(models.Model):
         """String for representing the Model object."""
         return self.dName
 
-    #def get_absolute_url(self):
-    #    """Returns the URL to access a detail record for this department."""
-    #   return reverse('department-detail', args=[str(self.id)])
+    def get_absolute_url(self):
+        """Returns the URL to access a detail record for this department."""
+        return reverse('department-detail', args=[str(self.id)])
 
 import uuid # Required for unique Employee 
 

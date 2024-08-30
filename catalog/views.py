@@ -23,3 +23,15 @@ class DepartmentListView(generic.ListView):
             department.position_count = department.positions.count()
         return context
     
+class DepartmentDetailView(generic.DetailView):
+    model = Department
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['employees'] = Employee.objects.filter(department=self.object)
+        return context
+    
+    
+class EmployeeDetailView(generic.DetailView):
+    model = Employee
+ 
+    
