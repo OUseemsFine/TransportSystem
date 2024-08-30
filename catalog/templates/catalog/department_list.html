@@ -1,0 +1,59 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Department</h1>
+  {% if department_list %}
+    <ul>
+      {% for department in department_list %}
+      <li>
+        <a href="{{ department.get_absolute_url }}">{{ department.dName }}</a> : {{ department.position_count }}个职位
+        <button class="toggle" 
+                onclick="togglePositions('{{ department.id }}')" 
+                id="triangle-{{ department.id }}" 
+                title="展开">
+          展开  <!-- 按钮文本 -->
+        </button>
+        <ul id="positions-{{ department.id }}" style="display: none;">
+          {% for position in department.positions.all %}
+            <li>{{ position }}</li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no departments in the company.</p>
+  {% endif %}
+  
+  <script>
+    function togglePositions(departmentId) {
+      const positionsList = document.getElementById(`positions-${departmentId}`);
+      const button = document.getElementById(`triangle-${departmentId}`);
+      if (positionsList.style.display === "none") {
+        positionsList.style.display = "block";
+        button.textContent = '收起';  // 点击后变为[收起]
+      } else {
+        positionsList.style.display = "none";
+        button.textContent = '展开';  // 点击后变回[展开]
+      }
+    }
+  </script>
+
+  <style>
+    .toggle {
+      cursor: pointer;
+      color: black;
+      background-color: transparent;
+      border: 1px solid black;
+      border-radius: 5px;
+      padding: 5px 10px;
+      margin-right: 5px;
+      transition: color 0.3s, background-color 0.3s;
+    }
+
+    .toggle:hover {
+      color: white;
+      background-color: green;  /* 悬停时变为绿色背景 */
+    }
+  </style>
+{% endblock %}

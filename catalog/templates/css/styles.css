@@ -1,0 +1,21 @@
+.sidebar-nav {
+    margin-top: 20px;
+    padding: 0;
+    list-style: none;
+  }
+  
+
+  .toggle {
+    cursor: pointer;
+    color: black;
+    transition: color 0.3s;
+    margin-right: 5px;
+}
+
+.toggle:hover {
+    color: green;  /* Change color on hover */
+}
+
+.triangle {
+    font-size: 14px;  /* Adjust triangle size */
+}
