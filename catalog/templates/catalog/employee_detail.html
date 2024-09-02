@@ -2,22 +2,12 @@
 
 {% block content %}
   <h1>{{ employee.eName }}</h1>
-
+  <p>生日: {{ employee.birthDate }}</p>
+  <p>入职时间: {{ employee.hireDate }}</p>
   <p>简历: {{ employee.eResume }}</p>
   <!-- author detail link not yet defined -->
-  <p>包含职位:  {{ department.positions.all|join:", " }}</p>
+  <p>职位:  {{ employee.position }}</p>
+  <p>部门:  {{ employee.department }}</p>
 
-  <div style="margin-left:20px;margin-top:20px">
-    <h4>Employees:</h4>
 
-    {% for employee in employees %}
-      <hr />
-      <p>
-        <strong><a href="{{ employee..get_absolute_url }">{{ employee.eName }</a></strong> :<span style="font-style: italic; color: gray;"> {{ employee.id }}</span> <br/>
-        Position: {{ employee.position.pName }}
-    </p>
-   
-      
-    {% endfor %}
-  </div>
 {% endblock %}

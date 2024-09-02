@@ -13,7 +13,7 @@
     {% for employee in employees %}
       <hr />
       <p>
-        <strong><a href="{{ employee..get_absolute_url }">{{ employee.eName }</a></strong> :<span style="font-style: italic; color: gray;"> {{ employee.id }}</span> <br/>
+        <strong><a href="{{employee.get_absolute_url}}">{{ employee.eName }}</a></strong> :<span style="font-style: italic; color: gray;"> {{ employee.id }}</span> <br/>
         Position: {{ employee.position.pName }}
     </p>
    
