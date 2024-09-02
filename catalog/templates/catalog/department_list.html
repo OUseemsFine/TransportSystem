@@ -1,59 +1,77 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Department</h1>
-  {% if department_list %}
+<h1>Department</h1>
+{% if department_list %}
     <ul>
-      {% for department in department_list %}
-      <li>
-        <a href="{{ department.get_absolute_url }}">{{ department.dName }}</a> : {{ department.position_count }}个职位
-        <button class="toggle" 
-                onclick="togglePositions('{{ department.id }}')" 
-                id="triangle-{{ department.id }}" 
-                title="展开">
-          展开  <!-- 按钮文本 -->
-        </button>
-        <ul id="positions-{{ department.id }}" style="display: none;">
-          {% for position in department.positions.all %}
-            <li>{{ position }}</li>
-          {% endfor %}
-        </ul>
-      </li>
-      {% endfor %}
+        {% for department in department_list %}
+        <li>
+            <a href="{{ department.get_absolute_url }}">{{ department.dName }}</a> : {{ department.positions.count }}个职位
+            ({{ department.employee_set.count }}个员工)  <!-- 显示该部门的员工数量 -->
+            <span class="circle-toggle" 
+                  onclick="togglePositions('{{ department.id }}')" 
+                  id="triangle-{{ department.id }}" 
+                  title="展开">&#9675;</span>  <!-- 空心圆 -->
+            <ul id="positions-{{ department.id }}" style="display: none;">
+                {% for position in department.positions.all %}
+                <li>
+                    {{ position }} 
+                    ({{ position.employee_set.count }}个员工)  <!-- 显示该职位的员工数量 -->
+                    <span class="circle-toggle" 
+                          onclick="toggleEmployees('{{ position.id }}')" 
+                          id="employee-triangle-{{ position.id }}" 
+                          title="展开">&#9675;</span>  <!-- 空心圆 -->
+                    <ul id="employees-{{ position.id }}" style="display: none;">
+                        {% for employee in position.employee_set.all %}
+                        <li>{{ employee.id }}: <strong><a href="{{employee.get_absolute_url}}">{{ employee.eName }}</a></strong></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
     </ul>
-  {% else %}
+{% else %}
     <p>There are no departments in the company.</p>
-  {% endif %}
-  
-  <script>
-    function togglePositions(departmentId) {
-      const positionsList = document.getElementById(`positions-${departmentId}`);
-      const button = document.getElementById(`triangle-${departmentId}`);
-      if (positionsList.style.display === "none") {
+{% endif %}
+
+<script>
+function togglePositions(departmentId) {
+    const positionsList = document.getElementById(`positions-${departmentId}`);
+    const button = document.getElementById(`triangle-${departmentId}`);
+    if (positionsList.style.display === "none") {
         positionsList.style.display = "block";
-        button.textContent = '收起';  // 点击后变为[收起]
-      } else {
+        button.innerHTML = '&#9679;';  // 实心圆
+    } else {
         positionsList.style.display = "none";
-        button.textContent = '展开';  // 点击后变回[展开]
-      }
+        button.innerHTML = '&#9675;';  // 空心圆
     }
-  </script>
+}
 
-  <style>
-    .toggle {
-      cursor: pointer;
-      color: black;
-      background-color: transparent;
-      border: 1px solid black;
-      border-radius: 5px;
-      padding: 5px 10px;
-      margin-right: 5px;
-      transition: color 0.3s, background-color 0.3s;
+function toggleEmployees(positionId) {
+    const employeesList = document.getElementById(`employees-${positionId}`);
+    const button = document.getElementById(`employee-triangle-${positionId}`);
+    if (employeesList.style.display === "none") {
+        employeesList.style.display = "block";
+        button.innerHTML = '&#9679;';  // 实心圆
+    } else {
+        employeesList.style.display = "none";
+        button.innerHTML = '&#9675;';  // 空心圆
     }
+}
+</script>
 
-    .toggle:hover {
-      color: white;
-      background-color: green;  /* 悬停时变为绿色背景 */
-    }
-  </style>
+<style>
+.circle-toggle {
+    cursor: pointer;
+    font-size: 20px;  /* 调整大小 */
+    margin-right: 5px;  /* 右边距 */
+    display: inline-block;  /* 使其在一行内 */
+}
+
+.circle-toggle:hover {
+    color: green;  /* 悬停时颜色变化 */
+}
+</style>
 {% endblock %}

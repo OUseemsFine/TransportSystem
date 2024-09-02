@@ -31,7 +31,9 @@
               <li><a href="{% url 'departments' %}">员工</a></li>
               <li><a href="">线路</a></li>
               <li><a href="">汽车</a></li>
+              <li><a href="{% url 'add-employee' %}">ADD</a></li>
             </ul>
+            {% block sidebutton %}{% endblock %}
           {% endblock %}
         </div>
         <div class="col-sm-10 ">{% block content %}{% endblock %}</div>

@@ -1,4 +1,9 @@
 {% extends "base_generic.html" %}
+{% block sidebutton %}
+<ul class="sidebar-nav">
+  <li><a href="{% url 'employee-update' pk=employee.id %}">修改</a></li>
+</ul>
+{% endblock %}
 
 {% block content %}
   <h1>{{ employee.eName }}</h1>

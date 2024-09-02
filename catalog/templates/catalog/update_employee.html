@@ -1,0 +1,90 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Update Employee</h1>
+<form method="post">
+    {% csrf_token %}
+    <div>
+        <label for="id_eName">姓名:</label>
+        <input type="text" id="id_eName" name="eName" value="{{ employee.eName }}" readonly class="readonly"><br>
+
+        <label for="id_birthDate">生日:</label>
+        <input type="date" id="id_birthDate" name="birthDate" value="{{ employee.birthDate|date:'Y-m-d' }}" readonly class="readonly"><br>
+
+        <label for="id_hireDate">入职时间:</label>
+        <input type="date" id="id_hireDate" name="hireDate" value="{{ employee.hireDate|date:'Y-m-d' }}" readonly class="readonly"><br>
+
+        {{ form.eResume.label_tag }} {{ form.eResume }}<br>
+        {{ form.eSalary.label_tag }} {{ form.eSalary }}<br>
+        
+        <label for="id_department">部门:</label>
+        <select id="id_department" name="department" onchange="updatePositions()" class="editable">
+            <option value="">选择部门</option>
+            {% for department in departments %}
+                <option value="{{ department.id }}" {% if department.id == employee.department.id %}selected{% endif %}>{{ department }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="position-select">选择职位:</label>
+        <select id="position-select" name="position">
+            <option value="">请先选择部门</option>
+        </select><br>
+    </div>
+    <button type="submit">Save Changes</button>
+</form>
+
+<script>
+    const positions = {
+        {% for department in departments %}
+            '{{ department.id }}': [
+                {% for position in department.positions.all %}
+                    '{{ position.id }}: {{ position }}',
+                {% endfor %}
+            ],
+        {% endfor %}
+    };
+
+    function updatePositions() {
+        const departmentId = document.getElementById('id_department').value;
+        const positionSelect = document.getElementById('position-select');
+
+        // 清空现有职位
+        positionSelect.innerHTML = '<option value="">选择职位</option>';
+        
+        if (departmentId) {
+            positions[departmentId].forEach(function(position) {
+                const option = document.createElement('option');
+                option.value = position.split(':')[0];  // 取出职位 ID
+                option.textContent = position.split(':')[1];  // 取出职位名称
+                positionSelect.appendChild(option);
+            });
+
+            // 选择当前员工的职位
+            positionSelect.value = '{{ employee.position.id }}';
+        }
+    }
+
+    // 页面加载时更新职位
+    document.addEventListener('DOMContentLoaded', updatePositions);
+</script>
+
+<style>
+    /* 样式可以根据需要调整 */
+    .readonly {
+        background-color: #f0f0f0;  /* 灰色背景 */
+        color: #666;  /* 灰色字体 */
+        border: 1px solid #ccc;  /* 边框颜色 */
+        cursor: not-allowed;  /* 禁止光标 */
+    }
+
+    .editable {
+        background-color: #fff;  /* 白色背景 */
+        color: #000;  /* 黑色字体 */
+        border: 1px solid #ccc;  /* 边框颜色 */
+    }
+
+    .editable:focus {
+        border-color: #007bff;  /* 聚焦时边框颜色变化 */
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Add Employee</h1>
+<form method="post">
+    {% csrf_token %}
+    <div>
+        {{ form.eName.label_tag }} {{ form.eName }}<br>
+        {{ form.birthDate.label_tag }} {{ form.birthDate }}<br>
+        {{ form.eResume.label_tag }} {{ form.eResume }}<br>
+        {{ form.hireDate.label_tag }} {{ form.hireDate }}<br>
+        {{ form.eSalary.label_tag }} {{ form.eSalary }}<br>
+
+        {{ form.department.label_tag }} {{ form.department }}<br>
+        <label for="position-select">选择职位:</label>
+        <select id="position-select" name="position" disabled>
+            <option value="">请先选择部门</option>
+        </select><br>
+    </div>
+    <button type="submit">Add Employee</button>
+</form>
+
+<script>
+    const positions = {
+        {% for department in department_list %}
+            '{{ department.id }}': [
+                {% for position in department.positions.all %}
+                    '{{ position.id }}: {{ position }}',
+                {% endfor %}
+            ],
+        {% endfor %}
+    };
+
+    document.getElementById('id_department').addEventListener('change', function() {
+        const departmentId = this.value;
+        const positionSelect = document.getElementById('position-select');
+
+        // 清空现有职位
+        positionSelect.innerHTML = '';
+        if (departmentId) {
+            positionSelect.disabled = false;  // 启用职位选择框
+            positions[departmentId].forEach(function(position) {
+                const option = document.createElement('option');
+                option.value = position.split(':')[0];  // 取出职位 ID
+                option.textContent = position.split(':')[1];  // 取出职位名称
+                positionSelect.appendChild(option);
+            });
+        } else {
+            positionSelect.disabled = true;  // 禁用职位选择框
+            positionSelect.innerHTML = '<option value="">请先选择部门</option>';
+        }
+    });
+</script>
+
+<style>
+    /* 样式可以根据需要调整 */
+    #position-select {
+        margin-top: 10px;
+    }
+</style>
+{% endblock %}
