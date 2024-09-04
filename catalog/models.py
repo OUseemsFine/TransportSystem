@@ -33,7 +33,7 @@ class StaionSequence(models.Model):
         return f'{self.id} (staion_sequence)'
     
 
-class Staion(models.Model):
+class Station(models.Model):
     """model of staions"""
     sName = models.CharField(
         max_length=200,
