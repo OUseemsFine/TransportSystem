@@ -6,6 +6,54 @@ from django.urls import reverse # Used in get_absolute_url() to get URL for spec
 from django.db.models import UniqueConstraint # Constrains fields to unique values
 from django.db.models.functions import Lower # Returns lower cased value of field
 
+class Busline(models.Model):
+    """Model to represent a busline"""
+    LINE_STATUS= (
+        ('m', '维护中'),
+        ('o', '运营中'),
+        ('b', '建设中'),
+    )
+    startTime = models.TimeField(help_text="Start time")
+    endTime = models.TimeField(help_text="End time")
+    lineNumber = models.PositiveIntegerField(unique=True, help_text="set a unique line number")
+    Price = models.DecimalField(max_digits=10, decimal_places=2, help_text="set a price")
+    description = models.TextField(help_text="describe this bus line")
+    
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'No.{self.lineNumber} bus line'
+
+class StaionSequence(models.Model):
+    """Model to represent a staion's information(belong to which line, sequence in a line)"""
+    station = models.ForeignKey('Station', on_delete=models.RESTRICT, help_text="select a staion")
+    order = models.PositiveIntegerField()
+    
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.id} (staion_sequence)'
+    
+
+class Staion(models.Model):
+    """model of staions"""
+    sName = models.CharField(
+        max_length=200,
+        help_text="Enter a staion name"
+    )
+    
+    STATION_STATUS =  (
+        ('m', '维护中'),
+        ('o', '运营中'),
+        ('b', '建设中'),
+    )
+    
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.sName
+    
+
 class Position(models.Model):
     """Model representing a position genre."""
     pName = models.CharField(
