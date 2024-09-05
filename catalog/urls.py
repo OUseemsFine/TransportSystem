@@ -16,16 +16,17 @@ urlpatterns += [
     path('department/employee/update/<uuid:pk>', views.update_employee, name='employee-update'),  # 修改员工的 URL
 ]
 
-# add API urls here: 
+################# API part start
 from .views import get_csrf_token  
-
 urlpatterns += [
     path('api/get-csrf-token/', get_csrf_token, name='get-csrf-token'), # get csrf token
 ]
 
-
+##### API of station
 from django.urls import path
-from .views import StationCreateView
+from .views import StationCreateView, StationListView
 urlpatterns += [
     path('api/stations/add', StationCreateView.as_view(), name='station-add'),
+    path('api/stations/list', StationListView.as_view(), name='station-list'),
 ]
+################### API part end

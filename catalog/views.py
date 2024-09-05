@@ -85,13 +85,23 @@ def get_csrf_token(request):
 
 from rest_framework import generics
 from .models import Station
-from .serializers import StationSerializer
+from .serializers import StationCreateSerializer
 
 class StationCreateView(generics.CreateAPIView):
     '''This is the api to add new station'''
     queryset = Station.objects.all()
-    serializer_class = StationSerializer
+    serializer_class = StationCreateSerializer
 
     def perform_create(self, serializer):
         # 在保存之前设置默认状态
         serializer.save(status='b')
+        
+        
+from rest_framework import generics
+from .models import Station
+from .serializers import StationGetSerializer
+
+class StationListView(generics.ListAPIView):
+    '''This is the api to fetch all the stations'''
+    queryset = Station.objects.all()
+    serializer_class = StationGetSerializer
