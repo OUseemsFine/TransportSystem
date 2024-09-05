@@ -39,7 +39,8 @@ class Station(models.Model):
     """model of staions"""
     sName = models.CharField(
         max_length=200,
-        help_text="Enter a staion name"
+        help_text="Enter a staion name",
+        unique=True
     )
     
     STATION_STATUS =  (

@@ -10,3 +10,9 @@ class StationGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Station
         fields = ['id', 'sName', 'status', 'latitude', 'longitude']  
+
+
+class StationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Station
+        fields = ['sName', 'status', 'latitude', 'longitude']

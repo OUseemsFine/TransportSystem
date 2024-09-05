@@ -118,3 +118,31 @@ def check_station_name(request):
         exists = Station.objects.filter(sName=sName).exists()
         return Response({'exists': exists})
     return Response({'exists': False}, status=400)
+
+from rest_framework import generics, status
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+from .models import Station
+from .serializers import StationSerializer
+
+class StationUpdateView(generics.UpdateAPIView):
+    serializer_class = StationSerializer
+
+    def get_object(self):
+        # 从请求数据中获取 sName
+        s_name = self.request.data.get('sName')
+        # 根据 sName 查找 Station 对象
+        return get_object_or_404(Station, sName=s_name)
+
+    def patch(self, request, *args, **kwargs):
+        station = self.get_object()
+        
+        if 'status' in request.data:
+            status_value = request.data['status']
+
+        # 更新 Station 对象
+        serializer = self.get_serializer(station, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
