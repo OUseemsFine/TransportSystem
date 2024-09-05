@@ -24,9 +24,10 @@ urlpatterns += [
 
 ##### API of station
 from django.urls import path
-from .views import StationCreateView, StationListView
+from .views import StationCreateView, StationListView, check_station_name
 urlpatterns += [
     path('api/stations/add', StationCreateView.as_view(), name='station-add'),
     path('api/stations/list', StationListView.as_view(), name='station-list'),
+    path('api/stations/check-name', check_station_name, name='check_station_name'),
 ]
 ################### API part end

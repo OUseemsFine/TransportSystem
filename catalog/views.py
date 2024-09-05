@@ -105,3 +105,16 @@ class StationListView(generics.ListAPIView):
     '''This is the api to fetch all the stations'''
     queryset = Station.objects.all()
     serializer_class = StationGetSerializer
+    
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Station
+
+@api_view(['GET'])
+def check_station_name(request):
+    '''this is the api to check if the station name has already existed'''
+    sName = request.GET.get('sName', None)
+    if sName is not None:
+        exists = Station.objects.filter(sName=sName).exists()
+        return Response({'exists': exists})
+    return Response({'exists': False}, status=400)
