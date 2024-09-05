@@ -13,6 +13,7 @@ class Busline(models.Model):
         ('o', '运营中'),
         ('b', '建设中'),
     )
+    status = models.CharField(max_length=1, choices=LINE_STATUS ,default='b')
     startTime = models.TimeField(help_text="Start time")
     endTime = models.TimeField(help_text="End time")
     lineNumber = models.PositiveIntegerField(unique=True, help_text="set a unique line number")
@@ -23,9 +24,10 @@ class Busline(models.Model):
         """String for representing the Model object."""
         return f'No.{self.lineNumber} bus line'
 
-class StaionSequence(models.Model):
+class StationSequence(models.Model):
     """Model to represent a staion's information(belong to which line, sequence in a line)"""
     station = models.ForeignKey('Station', on_delete=models.RESTRICT, help_text="select a staion")
+    busline = models.ForeignKey('Busline', on_delete=models.RESTRICT, help_text="select a busline", null=True)
     order = models.PositiveIntegerField()
     
     def __str__(self):
@@ -45,7 +47,7 @@ class Station(models.Model):
         ('o', '运营中'),
         ('b', '建设中'),
     )
-    
+    status = models.CharField(max_length=1, choices=STATION_STATUS, default='b')
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     

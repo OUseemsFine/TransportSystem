@@ -75,3 +75,23 @@ def update_employee(request, pk):
         'employee': employee,
         'departments': departments
     })
+    
+from django.http import JsonResponse
+from django.middleware.csrf import get_token
+
+def get_csrf_token(request):
+    '''This is the api to get a scrf token'''
+    return JsonResponse({'csrfToken': get_token(request)})  
+
+from rest_framework import generics
+from .models import Station
+from .serializers import StationSerializer
+
+class StationCreateView(generics.CreateAPIView):
+    '''This is the api to add new station'''
+    queryset = Station.objects.all()
+    serializer_class = StationSerializer
+
+    def perform_create(self, serializer):
+        # 在保存之前设置默认状态
+        serializer.save(status='b')
