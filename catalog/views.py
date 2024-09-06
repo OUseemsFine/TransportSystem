@@ -126,6 +126,7 @@ from .models import Station
 from .serializers import StationSerializer
 
 class StationUpdateView(generics.UpdateAPIView):
+    '''This is the api to update station's status, location info'''
     serializer_class = StationSerializer
 
     def get_object(self):
@@ -146,3 +147,12 @@ class StationUpdateView(generics.UpdateAPIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+# views.py
+from rest_framework import generics
+from .models import Busline
+from .serializers import BuslineSerializer
+
+class BuslineCreateView(generics.CreateAPIView):
+    queryset = Busline.objects.all()
+    serializer_class = BuslineSerializer
