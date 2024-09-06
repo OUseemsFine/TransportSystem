@@ -154,5 +154,21 @@ from .models import Busline
 from .serializers import BuslineSerializer
 
 class BuslineCreateView(generics.CreateAPIView):
+    '''This is the api to add a busline'''
     queryset = Busline.objects.all()
     serializer_class = BuslineSerializer
+    
+# views.py
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Busline
+
+class BuslineExistsView(generics.GenericAPIView):
+    '''This is the api to check if a bus-line number has been used'''
+    def get(self, request, line_number):
+        try:
+            busline = Busline.objects.get(lineNumber=line_number)
+            return Response({'exists': True}, status=status.HTTP_200_OK)
+        except Busline.DoesNotExist:
+            return Response({'exists': False}, status=status.HTTP_404_NOT_FOUND)
