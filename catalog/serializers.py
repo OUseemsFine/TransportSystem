@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Station, Busline
+from .models import Station, Busline, StationSequence
 #Station:
 class StationCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,3 +24,8 @@ class BuslineSerializer(serializers.ModelSerializer):
         model = Busline
         fields = '__all__'
         
+#Station Sequence:
+class StationSequenceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StationSequence
+        fields = ['id', 'station', 'busline', 'order']

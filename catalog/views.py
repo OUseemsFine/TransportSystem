@@ -191,3 +191,21 @@ class BuslineDetailView(generics.RetrieveAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Busline.DoesNotExist:
             return Response({'exists': False}, status=status.HTTP_404_NOT_FOUND)
+        
+from rest_framework import generics
+from .models import StationSequence
+from .serializers import StationSequenceSerializer
+from rest_framework.response import Response
+from rest_framework import status
+
+class StationSequenceCreate(generics.CreateAPIView):
+    '''This is the API to create a station sequence'''
+    queryset = StationSequence.objects.all()
+    serializer_class = StationSequenceSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            station_sequence = serializer.save()
+            return Response({'status': 'success', 'data': serializer.data}, status=status.HTTP_201_CREATED)
+        return Response({'status': 'error', 'message': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

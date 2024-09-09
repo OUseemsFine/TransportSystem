@@ -40,5 +40,11 @@ urlpatterns += [
     path('api/busline/get/<int:line_number>',BuslineDetailView.as_view(),name='busline-get'),
 ]
 
+from .views import StationSequenceCreate
+##StationSequence:
+urlpatterns += [
+    path('api/stationSequence/add',StationSequenceCreate.as_view(),name="station_sequence-add"),
+]
+
 ################### API part end
 
