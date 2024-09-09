@@ -172,3 +172,22 @@ class BuslineExistsView(generics.GenericAPIView):
             return Response({'exists': True}, status=status.HTTP_200_OK)
         except Busline.DoesNotExist:
             return Response({'exists': False}, status=status.HTTP_404_NOT_FOUND)
+        
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Busline
+from .serializers import BuslineSerializer    
+
+class BuslineDetailView(generics.RetrieveAPIView):
+    '''This is the API to get bus-line info via input lineNumber'''        
+    queryset = Busline.objects.all()
+    serializer_class = BuslineSerializer
+    
+    def get(self, request, line_number):
+        try:
+            busline = Busline.objects.get(lineNumber=line_number)
+            serializer = self.get_serializer(busline)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Busline.DoesNotExist:
+            return Response({'exists': False}, status=status.HTTP_404_NOT_FOUND)

@@ -33,10 +33,11 @@ urlpatterns += [
 ]
 
 ##busline:
-from .views import BuslineCreateView,BuslineExistsView
+from .views import BuslineCreateView,BuslineExistsView,BuslineDetailView
 urlpatterns += [
     path('api/busline/add', BuslineCreateView.as_view(), name='busline-create'),
     path('api/busline/exist/<int:line_number>',BuslineExistsView.as_view(),name='busline-ifexist'),
+    path('api/busline/get/<int:line_number>',BuslineDetailView.as_view(),name='busline-get'),
 ]
 
 ################### API part end
