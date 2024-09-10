@@ -148,7 +148,20 @@ class StationUpdateView(generics.UpdateAPIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-# views.py
+from rest_framework import generics
+from .models import Busline
+from .serializers import BuslineSerializer
+
+class BuslineListView(generics.ListAPIView):
+    '''This is the api to fetch all the bus-lines'''
+    queryset = Busline.objects.all()
+    serializer_class = BuslineSerializer
+    
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Station
+    
+
 from rest_framework import generics
 from .models import Busline
 from .serializers import BuslineSerializer
@@ -158,7 +171,7 @@ class BuslineCreateView(generics.CreateAPIView):
     queryset = Busline.objects.all()
     serializer_class = BuslineSerializer
     
-# views.py
+
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
@@ -171,7 +184,7 @@ class BuslineExistsView(generics.GenericAPIView):
             busline = Busline.objects.get(lineNumber=line_number)
             return Response({'exists': True}, status=status.HTTP_200_OK)
         except Busline.DoesNotExist:
-            return Response({'exists': False}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'exists': False}, status=status.HTTP_200_OK)
         
 from rest_framework import generics
 from rest_framework.response import Response
