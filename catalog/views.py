@@ -222,3 +222,20 @@ class StationSequenceCreate(generics.CreateAPIView):
             station_sequence = serializer.save()
             return Response({'status': 'success', 'data': serializer.data}, status=status.HTTP_201_CREATED)
         return Response({'status': 'error', 'message': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import StationSequence
+from .serializers import StationSequenceSerializer
+
+class StationSequenceList(APIView):
+    '''This is the API to fetch station sequences by busline number'''
+    def get(self, request, line_number):
+        station_sequences = StationSequence.objects.filter(busline__lineNumber=line_number)
+        if station_sequences.exists():
+            serializer = StationSequenceSerializer(station_sequences, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'exists': False}, status=status.HTTP_404_NOT_FOUND)
+            
