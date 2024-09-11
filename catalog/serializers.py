@@ -29,3 +29,8 @@ class StationSequenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = StationSequence
         fields = ['id', 'station', 'busline', 'order']
+        
+class StationDataSerializer(serializers.Serializer):
+    """Serializer for updating station sequences."""
+    station_id = serializers.IntegerField()
+    order = serializers.IntegerField()

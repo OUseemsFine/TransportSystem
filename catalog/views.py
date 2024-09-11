@@ -239,3 +239,95 @@ class StationSequenceList(APIView):
         else:
             return Response({'exists': False}, status=status.HTTP_404_NOT_FOUND)
             
+from rest_framework import generics, status
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+from .models import Busline
+from .serializers import BuslineSerializer
+
+class BuslineUpdateView(generics.UpdateAPIView):
+    '''This is the api to update bus-line'''
+    serializer_class = BuslineSerializer
+
+    def get_object(self):
+        lineNumber = self.request.data.get('lineNumber')
+        return get_object_or_404(Busline, lineNumber=lineNumber)
+
+    def patch(self, request, *args, **kwargs):
+        busline = self.get_object()
+        
+        if 'status' in request.data:
+            status_value = request.data['status']
+
+        # 更新 Busline 对象
+        serializer = self.get_serializer(busline, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import StationSequence
+from .serializers import StationDataSerializer
+
+
+@api_view(['POST'])
+def update_station_sequences(request, busline_id):
+    """
+    更新与给定 busline_id 相关的 StationSequence 实例。
+    :param busline_id: 公交线路的 ID
+    :param request: 包含 station_data 的请求数据
+    :examle:
+const buslineId = 1; // 替换为实际的 busline ID
+const stationData = [
+    { station_id: 1, order: 1 },
+    { station_id: 2, order: 2 },
+    { station_id: 3, order: 3 }
+];
+
+async function updateStationSequences(buslineId, stationData) {
+    try {
+        const response = await fetch(`/busline/${buslineId}/stations/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ stations: stationData }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error updating station sequences:', errorData);
+        } else {
+            const result = await response.json();
+            console.log('Station sequences updated successfully:', result);
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+    }
+}
+    """
+    station_data = request.data.get('stations', [])
+    
+    # 删除集合 A 中存在但集合 B 中没有的 station_id
+    current_sequences = StationSequence.objects.filter(busline_id=busline_id)
+    current_station_ids = {seq.station_id for seq in current_sequences}
+
+    new_station_ids = {data['station_id'] for data in station_data}
+
+    # 删除不在新数据中的站点
+    for sequence in current_sequences:
+        if sequence.station_id not in new_station_ids:
+            sequence.delete()
+
+    # 添加或更新新的 StationSequence 实例
+    for data in station_data:
+        StationSequence.objects.update_or_create(
+            busline_id=busline_id,
+            station_id=data['station_id'],
+            defaults={'order': data['order']}
+        )
+
+    return Response({'status': station_data}, status=status.HTTP_200_OK)

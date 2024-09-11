@@ -33,20 +33,23 @@ urlpatterns += [
 ]
 
 ##busline:
-from .views import BuslineCreateView,BuslineExistsView,BuslineDetailView,BuslineListView
+from .views import BuslineCreateView,BuslineExistsView,BuslineDetailView,BuslineListView,BuslineUpdateView
 urlpatterns += [
     path('api/busline/add', BuslineCreateView.as_view(), name='busline-create'),
     path('api/busline/exist/<int:line_number>',BuslineExistsView.as_view(),name='busline-ifexist'),
     path('api/busline/get/<int:line_number>',BuslineDetailView.as_view(),name='busline-get'),
     path('api/busline/get/all',BuslineListView.as_view(),name='busline-getAll'),
+    path('api/busline/update',BuslineUpdateView.as_view(),name='busline-update'),
 ]
 
-from .views import StationSequenceCreate,StationSequenceList
+from .views import StationSequenceCreate,StationSequenceList,update_station_sequences
 ##StationSequence:
 urlpatterns += [
     path('api/stationSequence/add',StationSequenceCreate.as_view(),name="station_sequence-add"),
     path('api/stationSequence/fetch/lineNumber/<int:line_number>',StationSequenceList.as_view(),name="station_sequence-getByline"),
+    path('api/stationSequence/update/<int:busline_id>', update_station_sequences, name='update_station_sequences'),
 ]
+
 
 ################### API part end
 
