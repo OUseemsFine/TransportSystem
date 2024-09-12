@@ -130,3 +130,72 @@ class Employee(models.Model):
     
     def get_absolute_url(self):
         return reverse('employee-detail', args=[str(self.id)])
+
+
+class Vehicle(models.Model):
+    '''Model representing a vehicle type'''
+    vModel = models.CharField(max_length=200, unique=True)
+    BUS_TYPE= (
+        ('n', '普通公交车'),
+        ('m', '微型公交车'),
+        ('j', '大型公交车'),
+        ('c','柴油公交车'),
+        ('d','电动公交车'),
+    )
+    vType = models.CharField(max_length=1, choices=BUS_TYPE ,default='n')
+    manufacturer = models.CharField(max_length=200)
+    capacity = models.IntegerField(help_text="Please input the capacity of this vehicle")
+    description = models.TextField();
+    
+        
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.vModel
+    
+    
+    
+import random
+import string
+def generate_random_plate_number():
+        """Generate a random license plate number."""
+        # province_code = random.choice(['京', '津', '沪', '粤', '川', '浙', '苏', '晋', '闽', '蒙', 
+        #                                 '桂', '陕', '吉', '黑', '辽', '鄂', '湘', '皖', '鲁', 
+        #                                 '贵', '青', '新', '藏', '琼', '宁', '港', '澳'])
+        province_code = '渝'
+        letter = random.choice(string.ascii_uppercase)  # 随机字母
+        digits = ''.join(random.choices(string.digits, k=5))  # 随机5位数字
+        return f"{province_code}{letter}{digits}"
+
+
+class VehicleInstance(models.Model):
+    '''Model representing a vehivle instance'''
+    
+    vehicle = models.ForeignKey('Vehicle', on_delete=models.RESTRICT, help_text="Choose a vehicle")
+    plateNumber = models.CharField(max_length=200, primary_key=True, default=generate_random_plate_number()) 
+    last_maintenance_date = models.DateField(blank=True);
+    produce_date = models.DateField(help_text="Input the produced date");
+    
+    
+    busline = models.ForeignKey('Busline',on_delete=models.SET_NULL,null = True,help_text="choose a bus-line")
+    
+    BUS_STATUS= (
+        ('m', '维护中'),
+        ('o', '运营中'),
+    )
+    status = models.CharField(max_length=1, choices=BUS_STATUS ,default='o')
+    
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.plateNumber
+    
+
+
+    # def save(self, *args, **kwargs):
+    #     """Override the save method to set a random plate number as the default."""
+    #     if not self.plateNumber:
+    #         self.plateNumber = generate_random_plate_number()
+    #     super().save(*args, **kwargs)
+    
+    
+    
+    
