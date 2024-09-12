@@ -188,13 +188,6 @@ class VehicleInstance(models.Model):
         """String for representing the Model object."""
         return self.plateNumber
     
-
-
-    # def save(self, *args, **kwargs):
-    #     """Override the save method to set a random plate number as the default."""
-    #     if not self.plateNumber:
-    #         self.plateNumber = generate_random_plate_number()
-    #     super().save(*args, **kwargs)
     
     
     
