@@ -348,3 +348,12 @@ class BuslineDeleteView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Busline.DoesNotExist:
             return Response({"error": "Busline not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+from rest_framework import generics
+from .models import VehicleInstance
+from .serializers import VehicleInstanceSerializer
+
+class VehicleInstanceListView(generics.ListAPIView):
+    '''This is the api to fetch all the vehicle instances'''
+    queryset = VehicleInstance.objects.all()
+    serializer_class = VehicleInstanceSerializer

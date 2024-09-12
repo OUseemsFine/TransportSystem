@@ -51,6 +51,11 @@ urlpatterns += [
     path('api/stationSequence/update/<int:busline_id>', update_station_sequences, name='update_station_sequences'),
 ]
 
+from .views import VehicleInstanceListView
+urlpatterns += [
+    path('api/vehicle/fetch/all',VehicleInstanceListView.as_view(),name="vehicle-get"),
+]
+
 
 ################### API part end
 

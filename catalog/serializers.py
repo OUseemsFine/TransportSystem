@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Station, Busline, StationSequence
+from .models import Station, Busline, StationSequence, VehicleInstance, Vehicle
 #Station:
 class StationCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,3 +34,8 @@ class StationDataSerializer(serializers.Serializer):
     """Serializer for updating station sequences."""
     station_id = serializers.IntegerField()
     order = serializers.IntegerField()
+    
+class VehicleInstanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VehicleInstance
+        fields = '__all__'
