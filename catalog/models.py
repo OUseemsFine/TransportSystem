@@ -26,8 +26,8 @@ class Busline(models.Model):
 
 class StationSequence(models.Model):
     """Model to represent a staion's information(belong to which line, sequence in a line)"""
-    station = models.ForeignKey('Station', on_delete=models.RESTRICT, help_text="select a staion")
-    busline = models.ForeignKey('Busline', on_delete=models.RESTRICT, help_text="select a busline", null=True)
+    station = models.ForeignKey('Station', on_delete=models.CASCADE, help_text="select a staion")
+    busline = models.ForeignKey('Busline', on_delete=models.CASCADE, help_text="select a busline", null=True)
     order = models.PositiveIntegerField()
     
     def __str__(self):

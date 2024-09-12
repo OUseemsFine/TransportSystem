@@ -331,3 +331,20 @@ async function updateStationSequences(buslineId, stationData) {
         )
 
     return Response({'status': station_data}, status=status.HTTP_200_OK)
+
+# views.py
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import Busline
+from .serializers import BuslineSerializer
+
+class BuslineDeleteView(APIView):
+    '''This is the API to delete a bus-line'''
+    def delete(self, request, line_number):
+        try:
+            busline = Busline.objects.get(lineNumber=line_number)
+            busline.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Busline.DoesNotExist:
+            return Response({"error": "Busline not found."}, status=status.HTTP_404_NOT_FOUND)
