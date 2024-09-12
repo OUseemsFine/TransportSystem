@@ -35,7 +35,15 @@ class StationDataSerializer(serializers.Serializer):
     station_id = serializers.IntegerField()
     order = serializers.IntegerField()
     
+class VehicleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vehicle
+        fields = '__all__'
+    
 class VehicleInstanceSerializer(serializers.ModelSerializer):
+    vehicle = VehicleSerializer()
+    busline = BuslineSerializer(allow_null=True)
     class Meta:
         model = VehicleInstance
         fields = '__all__'
+        
