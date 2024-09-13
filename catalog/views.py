@@ -350,6 +350,15 @@ class BuslineDeleteView(APIView):
             return Response({"error": "Busline not found."}, status=status.HTTP_404_NOT_FOUND)
         
 from rest_framework import generics
+from .models import Vehicle
+from .serializers import VehicleSerializer
+
+class VehicleListView(generics.ListAPIView):
+    '''This is the api to fetch all the vehicle models'''
+    queryset = Vehicle.objects.all()
+    serializer_class = VehicleSerializer
+        
+from rest_framework import generics
 from .models import VehicleInstance
 from .serializers import VehicleInstanceSerializer
 
@@ -357,3 +366,23 @@ class VehicleInstanceListView(generics.ListAPIView):
     '''This is the api to fetch all the vehicle instances'''
     queryset = VehicleInstance.objects.all()
     serializer_class = VehicleInstanceSerializer
+    
+# views.py
+from rest_framework import generics
+from .models import VehicleInstance
+from .serializers import VehicleInstanceAddSerializer
+
+class VehicleInstanceCreateAPIView(generics.CreateAPIView):
+    '''This is the api to add one vehicle instance'''
+    queryset = VehicleInstance.objects.all()
+    serializer_class = VehicleInstanceAddSerializer
+    
+# views.py
+from rest_framework import generics
+from .models import VehicleInstance
+from .serializers import VehicleInstanceUpdateSerializer
+
+class VehicleInstanceUpdateAPIView(generics.UpdateAPIView):
+    queryset = VehicleInstance.objects.all()
+    serializer_class = VehicleInstanceUpdateSerializer
+    lookup_field = 'plateNumber'  # Use plateNumber as the unique identifier

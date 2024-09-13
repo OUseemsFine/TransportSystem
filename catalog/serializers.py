@@ -47,3 +47,15 @@ class VehicleInstanceSerializer(serializers.ModelSerializer):
         model = VehicleInstance
         fields = '__all__'
         
+
+class VehicleInstanceAddSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VehicleInstance
+        fields = '__all__'  
+        
+
+class VehicleInstanceUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VehicleInstance
+        fields = ['busline', 'status']  
+        
